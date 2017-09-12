@@ -33,7 +33,9 @@ namespace OPNsense\CICAP\Api;
 
 use \OPNsense\Base\ApiControllerBase;
 use \OPNsense\Core\Backend;
+use \OPNsense\Core\Config;
 use \OPNsense\CICAP\General;
+use \OPNsense\Syslog\Syslog;
 
 /**
  * Class ServiceController
@@ -41,6 +43,8 @@ use \OPNsense\CICAP\General;
  */
 class ServiceController extends ApiControllerBase
 {
+    private $filename = "/var/log/c-icap/server.log";
+
     /**
      * check if ClamAV plugin is installed
      * @return array
@@ -156,5 +160,107 @@ class ServiceController extends ApiControllerBase
         } else {
             return array("status" => "failed");
         }
+    }
+
+    /**
+     * clear custom log
+     * @return array
+     */
+    public function getlogAction()
+    {
+        if ($this->request->isPost()) {
+
+            $filter = $this->request->getPost('filter');
+
+            $this->sessionClose();
+
+            $mdl = new Syslog();
+            $reverse = ($mdl->Reverse->__toString() == '1');
+            $numentries = intval($mdl->NumEntries->__toString());
+
+            if(!file_exists($this->filename))
+                return array("status" => "ok", "data" => array(array('time' => gettext("No data found"), 'filter' => "", 'message' => "")), 'filters' => '');
+
+            $logdata = array();
+            $formatted = array();
+            if($this->filename != '') {
+                $backend = new Backend();
+                $logdatastr = $backend->configdRun("syslog dumplog {$this->filename}");
+                $logdata = explode("\n", $logdatastr);
+            }
+
+            $filters = preg_split('/\s+/', trim(preg_quote($filter,'/')));
+            foreach ($filters as $pattern) {
+                if(trim($pattern) == '')
+                    continue;
+                $logdata = preg_grep("/$pattern/", $logdata);
+            }
+
+            if($reverse)
+                $logdata = array_reverse($logdata);
+
+            $counter = 1;
+            foreach ($logdata as $logent) {
+                if(trim($logent) == '')
+                    continue;
+
+                $logent = explode(",", $logent);
+                if (count($logent) < 3 || $logent[0] == "" || !date_create($logent[0]))
+                    continue;
+                $formatted[] = array('time' => $logent[0], 'filter' => $filter, 'message' => implode(",", array_slice($logent, 2)));
+
+                if(++$counter > $numentries)
+                    break;
+            }
+
+            if (count($formatted) == 0)
+                return array("status" => "ok", "data" => array(array('time' => gettext("No data found"), 'filter' => "", 'message' => "")), 'filters' => '');
+
+            return array("status" => "ok", "data" => $formatted, 'filters' => $filters);
+
+        } else {
+            return array("status" => "failed", "message" => gettext("Wrong request"));
+        }
+    }
+
+    /**
+     * clear custom log
+     * @return array
+     */
+    public function clearLogAction()
+    {
+        if ($this->request->isPost()) {
+
+            $this->sessionClose();
+
+            $backend = new Backend();
+            $backend->configdRun("cicap stop");
+            $backend->configdRun("syslog clearlog {$this->filename}");
+            $backend->configdRun("cicap start");
+
+            return array("status" => "ok", "message" => gettext("The log file has been reset."));
+        } else {
+            return array("status" => "failed", "message" => gettext("Wrong request"));
+        }
+    }
+
+    /**
+     * download log-file
+     * @return file content
+     */
+    public function downloadAction()
+    {
+        $config = Config::getInstance()->object();
+
+        $tmp = tempnam(sys_get_temp_dir(), '_log_');
+        $backend = new Backend();
+        $backend->configdRun("syslog dumplogtofile {$this->filename} {$tmp}");
+
+        $this->view->disable();
+        $this->response->setFileToSend($tmp, "{$config->system->hostname}-c_icap.log");
+        $this->response->setContentType("text/plain","charset=utf-8");
+        $this->response->send();
+        unlink($tmp);
+        die();
     }
 }
