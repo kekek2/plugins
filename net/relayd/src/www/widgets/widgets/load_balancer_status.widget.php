@@ -46,7 +46,7 @@ $relay_hosts = relayd_get_lb_summary();
 
 $lb_logfile = '/var/log/relayd.log';
 
-$nentries = isset($config['syslog']['nentries']) ? $config['syslog']['nentries'] : 50;
+$nentries = isset($config['OPNsense']['Syslog']['NumEntries']) ? $config['OPNsense']['Syslog']['NumEntries'] : 50;
 
 ?>
 <table class="table table-striped table-condensed">
