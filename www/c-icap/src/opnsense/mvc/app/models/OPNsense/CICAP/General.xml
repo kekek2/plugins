@@ -58,6 +58,10 @@
             <default></default>
             <Required>N</Required>
         </servername>
+        <localSquid type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </localSquid>
         <enable_accesslog type="BooleanField">
             <default>1</default>
             <Required>Y</Required>
