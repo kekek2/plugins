@@ -42,6 +42,21 @@ PLUGIN_REVISION?=	0
 PLUGIN_REQUIRES=	PLUGIN_NAME PLUGIN_VERSION PLUGIN_COMMENT \
 			PLUGIN_MAINTAINER
 
+PLUGIN_ENCODE?=		no
+HAS_ENCODER!=		test -d /usr/local/ioncube && echo -n yes || echo -n no
+
+.if ${HAS_ENCODER} == "yes" && "${PLUGIN_ENCODE}" == "yes"
+SRC=			src-enc
+PLUGIN_DEPENDS+=	ting-ioncube
+
+encode:
+	@echo "Encoding..."
+	/usr/local/ioncube/ioncube_encoder.sh -C -56 --encode "*.inc" src -o src-enc
+
+package: encode
+
+.endif
+
 check:
 .for PLUGIN_REQUIRE in ${PLUGIN_REQUIRES}
 .  if "${${PLUGIN_REQUIRE}}" == ""
