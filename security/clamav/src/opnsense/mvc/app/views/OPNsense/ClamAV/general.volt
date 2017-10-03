@@ -35,6 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 <div class="tab-content content-box tab-content">
     <div id="general" class="tab-pane fade in active">
         <div class="content-box" style="padding-bottom: 1.5em;">
+            {{ partial("layout_partials/base_form",['fields':versionForm,'id':'frm_version'])}}
             {{ partial("layout_partials/base_form",['fields':generalForm,'id':'frm_general_settings'])}}
             <hr />
             <div class="col-md-12">
@@ -60,6 +61,12 @@ function timeoutCheck() {
 $( document ).ready(function() {
     var data_get_map = {'frm_general_settings':"/api/clamav/general/get"};
     mapDataToFormUI(data_get_map).done(function(data){
+        formatTokenizersUI();
+        $('.selectpicker').selectpicker('refresh');
+    });
+
+    var version_get_map = {'frm_version':"/api/clamav/service/version"};
+    mapDataToFormUI(version_get_map).done(function(data){
         formatTokenizersUI();
         $('.selectpicker').selectpicker('refresh');
     });
