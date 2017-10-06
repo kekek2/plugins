@@ -213,7 +213,7 @@ class ServiceController extends ApiControllerBase
             $this->sessionClose();
 
             $mdl = new Syslog();
-            $reverse = ($mdl->Reverse->__toString() == '1');
+            $reverse = $mdl->Reverse->__toString();
             $numentries = intval($mdl->NumEntries->__toString());
 
             if(!file_exists($this->filename))
@@ -233,12 +233,9 @@ class ServiceController extends ApiControllerBase
             $formatted = array();
             if($this->filename != '') {
                 $backend = new Backend();
-                $logdatastr = $backend->configdRun("syslog dumplog {$this->filename} {$numentries} {$dump_filter}");
+                $logdatastr = $backend->configdRun("syslog dumplog {$this->filename} {$numentries} {$reverse} {$dump_filter}");
                 $logdata = explode("\n", $logdatastr);
             }
-
-            if($reverse)
-                $logdata = array_reverse($logdata);
 
             foreach ($logdata as $logent) {
                 if(trim($logent) == '')
