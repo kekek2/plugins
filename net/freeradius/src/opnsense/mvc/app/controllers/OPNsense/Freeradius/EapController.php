@@ -1,7 +1,6 @@
 <?php
 /*
-
-    Copyright (C) 2017 Fabian Franz
+    Copyright (C) 2017 Michael Muenz
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -24,49 +23,16 @@
     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
-
-
 */
 
+namespace OPNsense\Freeradius;
 
-namespace OPNsense\Tor;
-
-/**
-* Class IndexController
-* @package OPNsense/Tor
-*/
-class IndexController extends \OPNsense\Base\IndexController
+class EapController extends \OPNsense\Base\IndexController
 {
     public function indexAction()
     {
-        $this->view->title = gettext("The Onion Router");
-        $this->view->general = $this->getForm("general");
-        $this->view->toracl = $this->getForm("acl_sockspolicy");
-        $this->view->hidden_service = $this->getForm("hidden_service");
-        $this->view->hidden_service_acl = $this->getForm("hidden_service_acl");
-        $this->view->relay = $this->getForm("relay");
-        $this->view->exitpolicy = $this->getForm("acl_exitpolicy");
-        $this->view->pick('OPNsense/Tor/general');
-    }
-
-    public function infoAction()
-    {
-        $this->view->title = gettext("The Onion Router - Information");
-        $this->view->pick('OPNsense/Tor/info');
-    }
-    public function diagnosticsAction()
-    {
-        $this->view->title = gettext("The Onion Router - Diagnostics");
-        if ($this->is_tor_running()) {
-            $this->view->pick('OPNsense/Tor/diagnostics');
-        }
-        else {
-            $this->view->pick('OPNsense/Tor/error');
-        }
-    }
-    private function is_tor_running()
-    {
-        $status = (new Api\ServiceController())->statusAction();
-        return $status['status'] == 'running';
+        $this->view->title = gettext("EAP Settings");
+        $this->view->eapForm = $this->getForm("eap");
+        $this->view->pick('OPNsense/Freeradius/eap');
     }
 }
