@@ -1,8 +1,9 @@
 <menu>
   <Services>
     <C_ICAP VisibleName="C-ICAP" cssClass="fa fa-ambulance">
-        <Configuration order="10" url="/ui/cicap/general/index"/>
-        <LogFile VisibleName="Log File" order="20" url="/diag_logs_cicap.php"/>
+        <Configuration order="10" url="/ui/cicap/general/"/>
+        <ServerLogFile VisibleName="Server Log" order="20" url="/ui/syslog/logview/showlog/cicap-server"/>
+        <AccessLogFile VisibleName="Access Log" order="25" url="/ui/syslog/logview/showlog/cicap-access"/>
     </C_ICAP>
   </Services>
 </menu>

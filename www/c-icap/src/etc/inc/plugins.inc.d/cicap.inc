@@ -47,3 +47,20 @@ function cicap_services()
 
     return $services;
 }
+
+function cicap_syslog()
+{
+    return [
+        'cicap-server' => [
+            'external' => [
+                'filename' => '/var/log/c-icap/server.log',
+                'timestamp_pattern' => '/^([^\,]+),/'
+            ]
+        ],
+        'cicap-access'  => [
+            'external'  => [
+                'filename' => '/var/log/c-icap/access.log'
+            ]
+        ]
+    ];
+}

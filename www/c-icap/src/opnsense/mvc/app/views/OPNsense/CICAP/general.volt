@@ -32,7 +32,6 @@ POSSIBILITY OF SUCH DAMAGE.
 <ul class="nav nav-tabs" data-tabs="tabs" id="maintabs">
     <li class="active"><a data-toggle="tab" href="#general">{{ lang._('General') }}</a></li>
     <li><a data-toggle="tab" href="#antivirus">{{ lang._('Antivirus') }}</a></li>
-    <li><a data-toggle="tab" href="#logview">{{ lang._('Log view') }}</a></li>
 </ul>
 <div class="tab-content content-box tab-content">
     <div id="general" class="tab-pane fade in active">
@@ -53,54 +52,10 @@ POSSIBILITY OF SUCH DAMAGE.
             </div>
         </div>
     </div>
-    <div id="logview" class="tab-pane fade in">
-        <p>
-        <div class="input-group">
-            <div class="input-group-addon"><i class="fa fa-search"></i></div>
-            <input type="text" class="form-control" id="filtertext" name="filtertext" placeholder="{{lang._('Search for a specific message...')}}"/>
-            <input type="submit" id="downloadLogFileAction" class="btn btn-primary pull-right" value="{{lang._('Download log file')}}" />
-        </div>
-        </p>
-        <div id="logview" class="content-box-main">
-            <table id="grid-logview" class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th class="col-xs-2">{{lang._('Time')}}</th>
-                    <th>{{lang._('Message')}}</th>
-                </tr>
-                </thead>
-            </table>
-        </div>
-        <p>
-        <div class="input-group">
-            <input id="clearAction" type="submit" class="btn btn-primary" value="{{lang._('Clear log')}}"/>
-        </div>
-        </p>
-    </div>
 </div>
 
 <script type="text/javascript">
     $( document ).ready(function() {
-        function fillRows(data) {
-            while($("#grid-logview")[0].rows.length > 1)
-            {
-                $("#grid-logview")[0].deleteRow(1);
-            }
-
-            if(!data || !data.data || !data.data.length)
-                return;
-
-            for(i = 0; i < data.data.length; i++)
-            {
-                var row = $("#grid-logview")[0].insertRow();
-                var td = row.insertCell(0);
-                td.innerHTML = data.data[i].time;
-                td.class = "listlr";
-                td = row.insertCell(1);
-                td.innerHTML = data.data[i].message;
-                td.class = "listr";
-            }
-        };
 
         var data_get_map = {'frm_general_settings':"/api/cicap/general/get"};
         mapDataToFormUI(data_get_map).done(function(data){
@@ -116,36 +71,11 @@ POSSIBILITY OF SUCH DAMAGE.
             updateServiceStatusUI(data['status']);
         });
 
-	    // check if ClamAV plugin is installed
+	// check if ClamAV plugin is installed
         ajaxCall(url="/api/cicap/service/checkclamav", sendData={}, callback=function(data,status) {
 	    if (data == "0") {
                 $('#missing_clamav').show();
             }
-        });
-
-        ajaxCall(url="/api/cicap/service/getlog", sendData={},callback=function(data,status) {
-            fillRows(data);
-        });
-
-        $("#filtertext").keyup(function(e){
-            if(e.keyCode == 13) {
-                ajaxCall(url="/api/cicap/service/getlog", sendData={'filter': $("#filtertext").val() },callback=function(data,status) {
-                    fillRows(data);
-                });
-            }
-        });
-
-        $("#clearAction").click(function(){
-            ajaxCall(url="/api/cicap/service/clearLog", sendData={},callback=function(data,status) {
-
-                ajaxCall(url="/api/cicap/service/getlog", sendData={},callback=function(data,status) {
-                    fillRows(data);
-                });
-            });
-        });
-
-        $("#downloadLogFileAction").click(function(){
-            window.location = "/api/cicap/service/download";
         });
 
         // link save button to API set action
