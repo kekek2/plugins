@@ -188,6 +188,10 @@ $( document ).ready(function() {
         });
     });
 
+    // versions table view tuning
+    $("#frm_version colgroup col").eq(2).removeClass("col-md-5");
+    $("#frm_version colgroup col").eq(1).removeClass("col-md-4");
+
     // update history on tab state and implement navigation
     if(window.location.hash != "") {
         $('a[href="' + window.location.hash + '"]').click()
