@@ -69,6 +69,9 @@ class ServiceController extends ApiControllerBase
     public function startAction()
     {
         if ($this->request->isPost()) {
+            // close session for long running action
+            $this->sessionClose();
+
             $backend = new Backend();
             $response = $backend->configdRun("clamav start");
             return array("response" => $response);
@@ -84,6 +87,9 @@ class ServiceController extends ApiControllerBase
     public function stopAction()
     {
         if ($this->request->isPost()) {
+            // close session for long running action
+            $this->sessionClose();
+
             $backend = new Backend();
             $response = $backend->configdRun("clamav stop");
             return array("response" => $response);
@@ -99,6 +105,9 @@ class ServiceController extends ApiControllerBase
     public function restartAction()
     {
         if ($this->request->isPost()) {
+            // close session for long running action
+            $this->sessionClose();
+
             $backend = new Backend();
             $response = $backend->configdRun("clamav restart");
             return array("response" => $response);
@@ -131,7 +140,6 @@ class ServiceController extends ApiControllerBase
         } else {
             $status = "unkown";
         }
-
 
         return array("status" => $status);
     }
