@@ -51,7 +51,7 @@ PLUGIN_DEPENDS+=	ting-ioncube
 
 encode:
 	@echo "Encoding..."
-	/usr/local/ioncube/ioncube_encoder.sh -C -71 --encode "*.inc" src -o src-enc --shell-script-line '#!/usr/bin/env php'
+	/usr/local/ioncube/ioncube_encoder.sh -C -71 src -o src-enc --shell-script-line '#!/usr/bin/env php'
 
 package: encode
 
