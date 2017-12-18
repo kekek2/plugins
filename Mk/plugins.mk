@@ -49,9 +49,13 @@ HAS_ENCODER!=		test -d /usr/local/ioncube && echo -n yes || echo -n no
 SRC=			src-enc
 PLUGIN_DEPENDS+=	ting-ioncube
 
+.for NOENCODE in ${PLUGIN_NOENCODE}
+NOENCODE_OPTIONS+= --copy ${NOENCODE}
+.endfor
+
 encode:
 	@echo "Encoding..."
-	/usr/local/ioncube/ioncube_encoder.sh -C -71 src -o src-enc --shell-script-line '#!/usr/bin/env php'
+	/usr/local/ioncube/ioncube_encoder.sh -C -71 ${NOENCODE_OPTIONS} src -o src-enc --shell-script-line '#!/usr/bin/env php'
 
 package: encode
 
