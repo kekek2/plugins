@@ -148,6 +148,10 @@ scripts-auto:
 			    sed "s:%%ARG%%:$${FILE#./}:g" >> \
 			    ${DESTDIR}/+POST_INSTALL; \
 		done; \
+		for SCRIPT in +POST_INSTALL +POST_DEINSTALL; do \
+			cat ${TEMPLATESDIR}/configure >> \
+			    ${DESTDIR}/$${SCRIPT}; \
+		done; \
 	fi
 	@if [ -d ${.CURDIR}/${SRC}/opnsense/service/templates ]; then \
 		for FILE in $$(cd ${.CURDIR}/${SRC}/opnsense/service/templates && \
