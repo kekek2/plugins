@@ -1,4 +1,4 @@
-# Copyright (c) 2015-2017 Franco Fichtner <franco@opnsense.org>
+# Copyright (c) 2015-2018 Franco Fichtner <franco@opnsense.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -286,12 +286,17 @@ sweep: check
 	find ${.CURDIR} -type f -depth 1 -print0 | \
 	    xargs -0 -n1 ${.CURDIR}/../../Scripts/cleanfile
 
+STYLEDIRS?=	src/etc/inc/plugins.inc.d src/opnsense
+
 style: check
 	@: > ${.CURDIR}/.style.out
-	@if [ -d ${.CURDIR}/${SRC} ]; then \
-	    (phpcs --standard=${.CURDIR}/../../ruleset.xml \
-	    ${.CURDIR}/${SRC} || true) > ${.CURDIR}/.style.out; \
+.for STYLEDIR in ${STYLEDIRS}
+	@if [ -d ${.CURDIR}/${STYLEDIR} ]; then \
+		(phpcs --standard=${.CURDIR}/../../ruleset.xml \
+		    ${.CURDIR}/${STYLEDIR} || true) > \
+		    ${.CURDIR}/.style.out; \
 	fi
+.endfor
 	@echo -n "Total number of style warnings: "
 	@grep '| WARNING' ${.CURDIR}/.style.out | wc -l
 	@echo -n "Total number of style errors:   "
@@ -300,9 +305,11 @@ style: check
 	@rm ${.CURDIR}/.style.out
 
 style-fix: check
-	@if [ -d ${.CURDIR}/${SRC} ]; then \
-	    phpcbf --standard=${.CURDIR}/../../ruleset.xml \
-	    ${.CURDIR}/${SRC} || true; \
+.for STYLEDIR in ${STYLEDIRS}
+	@if [ -d ${.CURDIR}/${STYLEDIR} ]; then \
+		phpcbf --standard=${.CURDIR}/../../ruleset.xml \
+		    ${.CURDIR}/${STYLEDIR} || true; \
 	fi
+.endfor
 
 .PHONY:	check
