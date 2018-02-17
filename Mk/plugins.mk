@@ -51,7 +51,7 @@ PLUGIN_DEPENDS+=	ting-ioncube
 
 encode:
 	@echo "Encoding..."
-	/usr/local/ioncube/ioncube_encoder.sh -C -56 --encode "*.inc" src -o src-enc
+	/usr/local/ioncube/ioncube_encoder.sh -C -71 --encode "*.inc" src -o src-enc
 
 package: encode
 
