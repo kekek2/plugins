@@ -43,7 +43,7 @@ PLUGIN_REQUIRES=	PLUGIN_NAME PLUGIN_VERSION PLUGIN_COMMENT \
 			PLUGIN_MAINTAINER
 
 PLUGIN_ENCODE?=		no
-HAS_ENCODER!=		test -d /usr/local/ioncube && echo -n yes || echo -n no
+HAS_ENCODER!=		test -f /root/.ssh/encoder_rsa && echo -n yes || echo -n no
 
 .if ${HAS_ENCODER} == "yes" && "${PLUGIN_ENCODE}" == "yes"
 SRC=			src-enc
@@ -53,9 +53,17 @@ PLUGIN_DEPENDS+=	ting-ioncube
 NOENCODE_OPTIONS+= --copy ${NOENCODE}
 .endfor
 
+REMOTESHELL?=ssh -q encoder
+RCP?=scp -q
+RCPHOST?=encoder
+
 encode:
 	@echo "Encoding..."
-	/usr/local/ioncube/ioncube_encoder.sh -C -71 ${NOENCODE_OPTIONS} src -o src-enc --shell-script-line '#!/usr/bin/env php'
+	@ENC_TEMP=`${REMOTESHELL} 'mktemp -d'`; \
+	${RCP} -r src ${RCPHOST}:$${ENC_TEMP}; \
+	${REMOTESHELL} "cd $${ENC_TEMP}; /usr/local/ioncube/ioncube_encoder.sh -C -71 ${NOENCODE_OPTIONS} src -o src-enc --shell-script-line '#\!/usr/bin/env php'"; \
+	${RCP} -r ${RCPHOST}:$${ENC_TEMP}/src-enc . ; \
+	${REMOTESHELL} "rm -rf $${ENC_TEMP}"
 
 package: encode
 
