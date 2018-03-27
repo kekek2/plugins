@@ -25,7 +25,7 @@
  # POSSIBILITY OF SUCH DAMAGE.
  #}
 
-<script type="text/javascript">
+<script>
     window.redis_installed = {{ redis_installed ? 'true' : 'false' }};
     $( document ).ready(function() {
 
@@ -35,10 +35,7 @@
         mapDataToFormUI(data_get_map).done(function(){
             formatTokenizersUI();
             $('.selectpicker').selectpicker('refresh');
-            // request service status on load and update status box
-            ajaxCall(url="/api/rspamd/service/status", sendData={}, callback=function(data,status) {
-                updateServiceStatusUI(data['status']);
-            });
+            updateServiceControlUI('rspamd');
         });
 
         // update history on tab state and implement navigation
@@ -80,9 +77,7 @@
                                 draggable: true
                             });
                         } else {
-                            ajaxCall(url="/api/rspamd/service/status", sendData={}, callback=function(data,status) {
-                                updateServiceStatusUI(data['status']);
-                            });
+                            updateServiceControlUI('rspamd');
                         }
                     });
                 });

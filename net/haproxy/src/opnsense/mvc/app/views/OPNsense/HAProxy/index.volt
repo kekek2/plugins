@@ -27,7 +27,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #}
 
-<script type="text/javascript">
+<script>
 
     $( document ).ready(function() {
 
@@ -462,7 +462,7 @@ POSSIBILITY OF SUCH DAMAGE.
 <div class="content-box tab-content">
     <div id="introduction" class="tab-pane fade in active">
         <div class="col-md-12">
-            <h1>Quick Start Guide</h1>
+            <h1>{{ lang._('Quick Start Guide') }}</h1>
             <p>{{ lang._('Welcome to the HAProxy plugin! This plugin is designed to offer all the features and flexibility HAProxy is famous for. If you are using HAProxy for the first time, please take some time to get familiar with it. The following information should help you to get started.')}}</p>
             <p>{{ lang._('Note that you should configure HAProxy in the following order:') }}</p>
             <ul>
@@ -472,14 +472,14 @@ POSSIBILITY OF SUCH DAMAGE.
               <li>{{ lang._('Lastly, enable HAProxy using the %sService Settings%s.') | format('<b>', '</b>') }}</li>
             </ul>
             <p>{{ lang._('Please be aware that you need to %smanually%s add the required firewall rules for all configured services.') | format('<b>', '</b>') }}</p>
-            <p>{{ lang._('Further information is available in our %sHAProxy plugin documentation%s and of course in the %sofficial HAProxy documentation%s. Be sure to report bugs and request features on our %sGitHub issue page%s. Code contributions are also very welcome!') | format('<a href="https://docs.opnsense.org/manual/how-tos/haproxy.html" target="_blank">', '</a>', '<a href="http://cbonte.github.io/haproxy-dconv/1.7/configuration.html" target="_blank">', '</a>', '<a href="https://github.com/opnsense/plugins/issues/" target="_blank">', '</a>') }}</p>
+            <p>{{ lang._('Further information is available in our %sHAProxy plugin documentation%s and of course in the %sofficial HAProxy documentation%s. Be sure to report bugs and request features on our %sGitHub issue page%s. Code contributions are also very welcome!') | format('<a href="https://docs.opnsense.org/manual/how-tos/haproxy.html" target="_blank">', '</a>', '<a href="http://cbonte.github.io/haproxy-dconv/1.8/configuration.html" target="_blank">', '</a>', '<a href="https://github.com/opnsense/plugins/issues/" target="_blank">', '</a>') }}</p>
             <br/>
         </div>
     </div>
 
     <div id="subtab_haproxy-real-servers-introduction" class="tab-pane fade">
         <div class="col-md-12">
-            <h1>Real Servers</h1>
+            <h1>{{ lang._('Real Servers') }}</h1>
             <p>{{ lang._('HAProxy needs to know which servers should be used to serve content. The following minimum information must be provided for each server:') }}</p>
             <ul>
               <li>{{ lang._('%sFQDN or IP:%s The IP address or fully-qualified domain name that should be used when communicating with your server.') | format('<b>', '</b>') }}</li>
@@ -493,7 +493,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <div id="subtab_haproxy-virtual-services-introduction" class="tab-pane fade">
         <div class="col-md-12">
-            <h1>Virtual Services</h1>
+            <h1>{{ lang._('Virtual Services') }}</h1>
             <p>{{ lang._("HAProxy requires two virtual services for its load balancing and proxying features. The following virtual services must be configured for everything that should be served by HAProxy:") }}</p>
             <ul>
               <li>{{ lang._('%sBackend Pools:%s The HAProxy backend. Group the %spreviously added servers%s to build a server farm. All servers in a group usually deliver the same content. The Backend Pool cares for health monitoring and load distribution. A Backend Pool must also be configured if you only have a single server. The same Backend Pool may be used for multiple Public Services.') | format('<b>', '</b>', '<b>', '</b>') }}</li>
@@ -507,14 +507,14 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <div id="subtab_haproxy-rules-checks-introduction" class="tab-pane fade">
         <div class="col-md-12">
-            <h1>Rules &amp; Checks</h1>
+            <h1>{{ lang._('Rules and Checks') }}</h1>
             <p>{{ lang._("After getting acquainted with HAProxy the following optional features may prove useful:") }}</p>
             <ul>
               <li>{{ lang._('%sHealth Monitors:%s The HAProxy "health checks". Health Monitors are used by %sBackend Pools%s to determine if a server is still able to respond to client requests. If a server fails a health check it will automatically be removed from a Backend Pool and healthy servers are automatically re-added.') | format('<b>', '</b>', '<b>', '</b>') }}</li>
               <li>{{ lang._('%sConditions:%s HAProxy is capable of extracting data from requests, responses and other connection data and match it against predefined patterns. Use these powerful patterns to compose a condition that may be used in multiple Rules.') | format('<b>', '</b>') }}</li>
               <li>{{ lang._('%sRules:%s Perform a large set of actions if one or more %sConditions%s match. These Rules may be used in %sBackend Pools%s as well as %sPublic Services%s.') | format('<b>', '</b>', '<b>', '</b>', '<b>', '</b>', '<b>', '</b>') }}</li>
             </ul>
-            <p>{{ lang._("For more information on HAProxy's %sACL feature%s see the %sofficial documentation%s.") | format('<b>', '</b>', '<a href="http://cbonte.github.io/haproxy-dconv/1.7/configuration.html#7" target="_blank">', '</a>') }}</p>
+            <p>{{ lang._("For more information on HAProxy's %sACL feature%s see the %sofficial documentation%s.") | format('<b>', '</b>', '<a href="http://cbonte.github.io/haproxy-dconv/1.8/configuration.html#7" target="_blank">', '</a>') }}</p>
             <p>{{ lang._('Note that it is possible to directly add options to the HAProxy configuration by using the "option pass-through", a setting that is available for several configuration items. It allows you to implement configurations that are currently not officially supported by this plugin. It is strongly discouraged to rely on this feature. Please report missing features on our GitHub page!') | format('<b>', '</b>') }}</p>
             <br/>
         </div>
@@ -522,13 +522,13 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <div id="subtab_haproxy-advanced-introduction" class="tab-pane fade">
         <div class="col-md-12">
-            <h1>Advanced Features</h1>
+            <h1>{{ lang._('Advanced Features') }}</h1>
             <p>{{ lang._("Most of the time these features are not required, but in certain situations they will be handy:") }}</p>
             <ul>
               <li>{{ lang._("%sError Messages:%s Return a custom message instead of errors generated by HAProxy. Useful to overwrite HAProxy's internal error messages. The message must represent the full HTTP response and include required HTTP headers.") | format('<b>', '</b>') }}</li>
               <li>{{ lang._("%sLua scripts:%s Include your own Lua code/scripts to extend HAProxy's functionality. The Lua code can be used in certain %sRules%s, for example.") | format('<b>', '</b>', '<b>', '</b>') }}</li>
             </ul>
-            <p>{{ lang._("For more details visit HAProxy's official documentation regarding the %sError Messages%s and the %sLua Script%s features.") | format('<a href="http://cbonte.github.io/haproxy-dconv/1.7/configuration.html#4-errorfile" target="_blank">', '</a>', '<a href="http://cbonte.github.io/haproxy-dconv/1.7/configuration.html#lua-load" target="_blank">', '</a>') }}</p>
+            <p>{{ lang._("For more details visit HAProxy's official documentation regarding the %sError Messages%s and the %sLua Script%s features.") | format('<a href="http://cbonte.github.io/haproxy-dconv/1.8/configuration.html#4-errorfile" target="_blank">', '</a>', '<a href="http://cbonte.github.io/haproxy-dconv/1.8/configuration.html#lua-load" target="_blank">', '</a>') }}</p>
             <br/>
         </div>
     </div>

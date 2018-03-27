@@ -26,7 +26,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
 #}
-<script type="text/javascript" src="/ui/js/quagga/lodash.js"></script>
+<script src="/ui/js/quagga/lodash.js"></script>
 <script type="text/x-template" id="routestpl">
 <table>
   <thead>
@@ -58,7 +58,7 @@ POSSIBILITY OF SUCH DAMAGE.
 </table>
 </script>
 
-<script type="text/javascript">
+<script>
 function translate(content) {
   tr = {};
   tr['kernel route'] = '{{ lang._('Kernel Route') }}';
@@ -96,9 +96,8 @@ dataconverters = {
 }
 
 $(document).ready(function() {
-  ajaxCall(url="/api/quagga/service/status", sendData={}, callback=function(data,status) {
-      updateServiceStatusUI(data['status'])
-  });
+  updateServiceControlUI('quagga');
+
   ajaxCall(url="/api/quagga/diagnostics/generalroutes", sendData={}, callback=function(data,status) {
     content = _.template($('#routestpl').html())(data['response'])
     $('#routing').html(content)
