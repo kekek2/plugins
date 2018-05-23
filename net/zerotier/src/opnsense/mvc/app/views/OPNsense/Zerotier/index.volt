@@ -78,7 +78,6 @@ POSSIBILITY OF SUCH DAMAGE.
                     $('#ztNetworksLink').attr("data-toggle", "tab");
             }
         };
-
     });
 
 </script>
