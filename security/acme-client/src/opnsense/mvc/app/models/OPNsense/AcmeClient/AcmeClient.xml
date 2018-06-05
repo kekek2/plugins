@@ -1,9 +1,7 @@
 <model>
     <mount>//OPNsense/AcmeClient</mount>
-    <version>1.3.0</version>
-    <description>
-        a secure Let's Encrypt plugin
-    </description>
+    <version>1.4.0</version>
+    <description>A secure Let's Encrypt plugin</description>
     <items>
         <settings>
             <enabled type="BooleanField">
@@ -205,6 +203,17 @@
                     <multiple>N</multiple>
                     <Required>Y</Required>
                 </validationMethod>
+                <keyLength type="OptionField">
+                    <Required>Y</Required>
+                    <default>key_4096</default>
+                    <OptionValues>
+                        <key_2048>2048 bit</key_2048>
+                        <key_3072>3072 bit</key_3072>
+                        <key_4096>4096 bit</key_4096>
+                        <key_ec256>ec-256</key_ec256>
+                        <key_ec384>ec-384</key_ec384>
+                    </OptionValues>
+                </keyLength>
                 <restartActions type="ModelRelationField">
                     <Model>
                         <actions>
@@ -331,6 +340,7 @@
                         <dns_ali>aliyun.com API</dns_ali>
                         <dns_aws>AWS Route 53</dns_aws>
                         <dns_cf>CloudFlare.com API</dns_cf>
+                        <dns_cloudns>ClouDNS API</dns_cloudns>
                         <dns_cx>CloudXNS.com API</dns_cx>
                         <dns_cyon>cyon.ch API</dns_cyon>
                         <dns_dgon>DigitalOcean API</dns_dgon>
@@ -387,6 +397,15 @@
                 <dns_cf_key type="TextField">
                     <Required>N</Required>
                 </dns_cf_key>
+                <dns_cloudns_auth_id type="TextField">
+                    <Required>N</Required>
+                </dns_cloudns_auth_id>
+                <dns_cloudns_sub_auth_id type="TextField">
+                    <Required>N</Required>
+                </dns_cloudns_sub_auth_id>
+                <dns_cloudns_auth_password type="TextField">
+                    <Required>N</Required>
+                </dns_cloudns_auth_password>
                 <dns_cx_key type="TextField">
                     <Required>N</Required>
                 </dns_cx_key>
