@@ -4,5 +4,6 @@ PLUGIN_REVISION=	2
 PLUGIN_COMMENT=		c-icap connects the web proxy with a virus scanner
 PLUGIN_DEPENDS=		c-icap c-icap-modules
 PLUGIN_MAINTAINER=	m.muenz@gmail.com
+CONFLICTS=			os-c-icap-clamav
 
 .include "../../Mk/plugins.mk"
