@@ -1,7 +1,7 @@
 <?php
 
 $logfile = '/var/log/mail.log';
-$logclog = true;
+$logclog = false;
 
 $service_hook = 'postfix';
 
