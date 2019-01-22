@@ -2,6 +2,7 @@
 rspamd_var_script="/usr/local/opnsense/scripts/rspamd/setup.sh"
 rspamd_enable="YES"
 rspamd_group="clamav"
+rspamd_chroot="/"
 {% else %}
 rspamd_enable="NO"
 {% endif %}
