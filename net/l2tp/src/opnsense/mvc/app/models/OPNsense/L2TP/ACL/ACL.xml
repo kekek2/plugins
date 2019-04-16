@@ -11,6 +11,13 @@
             <pattern>vpn_l2tp.php*</pattern>
         </patterns>
     </page-vpn-vpnl2tp>
+    <page-vpn-vpnl2tp-routes>
+        <name>VPN: L2TP: Routes</name>
+        <patterns>
+            <pattern>/ui/L2TP/Routes/*</pattern>
+            <pattern>/api/L2TP/Routes/*</pattern>
+        </patterns>
+    </page-vpn-vpnl2tp-routes>
     <page-vpn-vpnl2tp-users-edit>
         <name>VPN: L2TP: Users: Edit</name>
         <patterns>

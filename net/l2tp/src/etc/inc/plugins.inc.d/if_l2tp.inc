@@ -81,6 +81,21 @@ function if_l2tp_link_scripts($rootdir, $logtype = 'l2tp')
 /sbin/ifconfig $1 group l2tp
 
 EOD;
+
+    /* Loop through routes and expand aliases as we find them. */
+    foreach (config_read_array('l2tp', 'route') as $route) {
+        if ($route['disabled'])
+            continue;
+
+        $network = $route['network'];
+        $gateway = $route['gateway'];
+
+        if (is_alias($network)) {
+        } elseif (is_subnet($network)) {
+            $up .= "/sbin/route add -net {$network} {$gateway}\n"
+        }
+    }
+
     $down = <<<'EOD'
 #!/bin/sh
 

@@ -2,6 +2,7 @@
     <VPN>
         <L2TP cssClass="fa fa-unlock fa-fw" order="100">
             <Settings order="10" url="/vpn_l2tp.php"/>
+            <Routes order="15" url="/ui/l2tp/routes" />
             <Users order="20" url="/vpn_l2tp_users.php">
                 <Edit url="/vpn_l2tp_users_edit.php*" visibility="hidden"/>
             </Users>
