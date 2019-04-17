@@ -92,7 +92,7 @@ EOD;
 
         if (is_alias($network)) {
         } elseif (is_subnet($network)) {
-            $up .= "/sbin/route add -net {$network} {$gateway}\n"
+            $up .= "/sbin/route add -net {$network} {$gateway}\n";
         }
     }
 
