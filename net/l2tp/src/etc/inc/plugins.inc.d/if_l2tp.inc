@@ -90,8 +90,7 @@ EOD;
         $network = $route['network'];
         $gateway = $route['gateway'];
 
-        if (is_alias($network)) {
-        } elseif (is_subnet($network)) {
+        if (is_subnet($network) && is_ipaddr($gateway)) {
             $up .= "/sbin/route add -net {$network} {$gateway}\n";
         }
     }
