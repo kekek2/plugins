@@ -83,7 +83,7 @@ function if_l2tp_link_scripts($rootdir, $logtype = 'l2tp')
 EOD;
 
     /* Loop through routes and expand aliases as we find them. */
-    foreach (config_read_array('l2tp', 'route') as $route) {
+    foreach (config_read_array('l2tp_routes', 'route') as $route) {
         if ($route['disabled'])
             continue;
 
