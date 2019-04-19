@@ -91,7 +91,7 @@ EOD;
         $gateway = $route['gateway'];
 
         if (is_subnet($network) && is_ipaddr($gateway)) {
-            $up .= "/sbin/route add {$network} {$gateway}\n";
+            $up .= "if [ \"$4\" == \"{$gateway}\" ]; then\n    /sbin/route add {$network} {$gateway}\nfi\n";
         }
     }
 
