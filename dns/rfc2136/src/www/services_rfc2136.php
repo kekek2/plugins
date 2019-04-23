@@ -72,7 +72,7 @@ $main_buttons = array(
 
 ?>
 <body>
-  <script type="text/javascript">
+  <script>
   $( document ).ready(function() {
     // delete service action
     $(".act_delete_service").click(function(event){
@@ -125,7 +125,7 @@ $main_buttons = array(
                       <th><?=gettext("Hostname");?></th>
                       <th><?=gettext("Cached IP");?></th>
                       <th><?=gettext("Description");?></th>
-                      <th></th>
+                      <th class"text-nowrap"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -134,8 +134,8 @@ $main_buttons = array(
                     foreach ($a_rfc2136 as $rfc2136): ?>
                     <tr>
                       <td>
-                        <a href="#" class="act_toggle" data-id="<?=$i;?>" data-toggle="tooltip" title="<?=(!empty($rfc2136['enable'])) ? gettext("disable") : gettext("enable");?>">
-                          <span class="glyphicon glyphicon-play <?=(!empty($rfc2136['enable'])) ? "text-success" : "text-muted";?>"></span>
+                        <a href="#" class="act_toggle" data-id="<?=$i;?>" data-toggle="tooltip" title="<?=(!empty($rfc2136['enable'])) ? gettext("Disable") : gettext("Enable");?>">
+                          <i class="fa fa-play fa-fw <?=(!empty($rfc2136['enable'])) ? "text-success" : "text-muted";?>"></i>
                         </a>
                         <?=!empty($config['interfaces'][$rfc2136['interface']]['descr']) ? $config['interfaces'][$rfc2136['interface']]['descr'] : strtoupper($rfc2136['interface']);?>
                       </td>
@@ -186,9 +186,9 @@ $main_buttons = array(
                         }?>
                       </td>
                       <td><?=$rfc2136['descr'];?></td>
-                      <td>
-                        <a href="services_rfc2136_edit.php?id=<?=$i;?>" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></a>
-                        <a href="#" data-id="<?=$i;?>" class="act_delete_service btn btn-xs btn-default"><i class="fa fa-trash text-muted"></i></a>
+                      <td class="text-nowrap">
+                        <a href="services_rfc2136_edit.php?id=<?=$i;?>" class="btn btn-xs btn-default"><i class="fa fa-pencil fa-fw"></i></a>
+                        <a href="#" data-id="<?=$i;?>" class="act_delete_service btn btn-xs btn-default"><i class="fa fa-trash fa-fw"></i></a>
                       </td>
                     </tr>
 <?php

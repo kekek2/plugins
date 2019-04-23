@@ -25,7 +25,7 @@
  # POSSIBILITY OF SUCH DAMAGE.
  #}
 
-<script type="text/javascript">
+<script>
 $( document ).ready(function() {
     var data_get_map = {'frm_zabbixagent':"/api/zabbixagent/settings/get"};
 
@@ -33,10 +33,7 @@ $( document ).ready(function() {
     mapDataToFormUI(data_get_map).done(function(){
         formatTokenizersUI();
         $('.selectpicker').selectpicker('refresh');
-        // request service status on load and update status box
-        ajaxCall(url="/api/zabbixagent/service/status", sendData={}, callback=function(data,status) {
-            updateServiceStatusUI(data['status']);
-        });
+        updateServiceControlUI('zabbixagent');
     });
 
     /***********************************************************************
@@ -67,9 +64,7 @@ $( document ).ready(function() {
                             draggable: true
                         });
                     } else {
-                        ajaxCall(url="/api/zabbixagent/service/status", sendData={}, callback=function(data,status) {
-                            updateServiceStatusUI(data['status']);
-                        });
+                        updateServiceControlUI('zabbixagent');
                     }
                 });
             });

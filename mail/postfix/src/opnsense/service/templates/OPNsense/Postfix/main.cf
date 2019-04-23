@@ -55,6 +55,12 @@ inet_interfaces = {{ OPNsense.postfix.general.inet_interfaces }}
 {% else %}
 inet_interfaces = all
 {% endif %}
+{% if helpers.exists('OPNsense.postfix.general.bind_address') and OPNsense.postfix.general.bind_address != '' %}
+smtp_bind_address = {{ OPNsense.postfix.general.bind_address }}
+{% endif %}
+{% if helpers.exists('OPNsense.postfix.general.bind_address6') and OPNsense.postfix.general.bind_address6 != '' %}
+smtp_bind_address6 = {{ OPNsense.postfix.general.bind_address6 }}
+{% endif %}
 {% if helpers.exists('OPNsense.postfix.general.mynetworks') and OPNsense.postfix.general.mynetworks != '' %}
 mynetworks = {{ OPNsense.postfix.general.mynetworks.replace(',', ' ') }}
 {% else %}
@@ -88,12 +94,26 @@ smtpd_tls_cert_file = /usr/local/etc/postfix/cert_opn.pem
 smtpd_tls_CAfile = /usr/local/etc/postfix/ca_opn.pem
 {% endif %}
 
+{% if helpers.exists('OPNsense.postfix.general.relayhost') and OPNsense.postfix.general.relayhost != '' %}
+relayhost = {{ OPNsense.postfix.general.relayhost }}
+{% endif %}
+
+{% if helpers.exists('OPNsense.postfix.general.smtpauth_enabled') and OPNsense.postfix.general.smtpauth_enabled != '' %}
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/usr/local/etc/postfix/smtp_auth
+smtp_sasl_security_options =
+{% endif %}
+
 {% if helpers.exists('OPNsense.postfix.antispam.enable_rspamd') and OPNsense.postfix.antispam.enable_rspamd == '1' %}
 smtpd_milters = inet:localhost:11332
 non_smtpd_milters = inet:localhost:11332
 milter_protocol = 6
 milter_mail_macros =  i {mail_addr} {client_addr} {client_name} {auth_authen}
 milter_default_action = accept
+{% endif %}
+
+{% if helpers.exists('OPNsense.postfix.general.enforce_recipient_check') and OPNsense.postfix.general.enforce_recipient_check == '1' %}
+relay_recipient_maps = hash:/usr/local/etc/postfix/recipient_access
 {% endif %}
 
 {# Sender Restrictions #}
@@ -138,7 +158,7 @@ smtpd_recipient_restrictions = {{ smtpd_recipient_restrictions | join(', ') }}
 
 smtpd_helo_required = yes
 
-### Syslog tweak, will be removed before stable
-syslog_facility = security
+syslog_facility = mail
+syslog_name = postfix
 
 {% endif %}

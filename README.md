@@ -37,8 +37,12 @@ dns/dyndns -- Dynamic DNS Support
 dns/rfc2136 -- RFC-2136 Support
 mail/postfix -- SMTP mail relay
 mail/rspamd -- Protect your network from spam
+misc/theme-cicada -- The cicada theme - grey/orange
+misc/theme-rebellion -- A suitably dark theme
+misc/theme-tukan -- The tukan theme - blue/white
 net-mgmt/collectd -- Collect system and application performance metrics periodically
 net-mgmt/lldpd -- LLDP allows you to know exactly on which port is a server
+net-mgmt/net-snmp -- Net-SNMP is a daemon for the SNMP protocol
 net-mgmt/snmp -- SNMP Server via bsnmpd
 net-mgmt/telegraf -- Agent for collecting metrics and data
 net-mgmt/zabbix-agent -- Enterprise-class open source distributed monitoring agent
@@ -55,6 +59,7 @@ net/pppoe -- PPPoE server based on MPD5
 net/pptp -- PPTP server based on MPD5
 net/quagga -- End of life, superseded by FRR plugin
 net/relayd -- Relayd Load Balancer
+net/shadowsocks -- Secure socks5 proxy
 net/siproxd -- Siproxd is a proxy daemon for the SIP protocol
 net/upnp -- Universal Plug and Play Service
 net/wol -- Wake on LAN Service
@@ -64,15 +69,19 @@ security/clamav -- Antivirus engine for detecting malicious threats
 security/intrusion-detection-content-et-pro -- IDS Proofpoint ET Pro ruleset (needs a valid subscription)
 security/intrusion-detection-content-pt-open -- IDS PT Research ruleset (only for non-commercial use)
 security/intrusion-detection-content-snort-vrt -- IDS Snort VRT ruleset (needs registration or subscription)
+security/openconnect -- OpenConnect Client
 security/tinc -- Tinc VPN
 security/tor -- The Onion Router
 sysutils/boot-delay -- Apply a persistent 10 second boot delay
+sysutils/lcdproc-sdeclcd -- LCDProc for SDEC LCD devices
 sysutils/monit -- Proactive system monitoring
+sysutils/node_exporter -- Prometheus exporter for machine metrics
 sysutils/nut -- Network UPS Tools
 sysutils/smart -- SMART tools
 sysutils/vmware -- VMware tools
 sysutils/xen -- Xen guest utilities
-www/c-icap -- c-icap connects your Proxy with a virus scanner
+www/c-icap -- c-icap connects the web proxy with a virus scanner
+www/cache -- Webserver cache
 www/web-proxy-sso -- Kerberos authentication module
 www/web-proxy-useracl -- Group and user ACL for the web proxy
 ```

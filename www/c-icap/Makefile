@@ -1,7 +1,9 @@
 PLUGIN_NAME=		c-icap
-PLUGIN_VERSION=		1.4
-PLUGIN_COMMENT=		c-icap connects your Proxy with a virus scanner
+PLUGIN_VERSION=		1.5
+PLUGIN_REVISION=	2
+PLUGIN_COMMENT=		c-icap connects the web proxy with a virus scanner
 PLUGIN_DEPENDS=		c-icap c-icap-modules
 PLUGIN_MAINTAINER=	m.muenz@gmail.com
+CONFLICTS=			os-c-icap-clamav
 
 .include "../../Mk/plugins.mk"

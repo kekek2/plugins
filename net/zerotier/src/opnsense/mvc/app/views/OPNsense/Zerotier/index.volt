@@ -27,7 +27,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
 #}
-<script type="text/javascript">
+<script>
 
     $(document).ready(function() {
 
@@ -78,7 +78,6 @@ POSSIBILITY OF SUCH DAMAGE.
                     $('#ztNetworksLink').attr("data-toggle", "tab");
             }
         };
-
     });
 
 </script>
@@ -98,10 +97,10 @@ POSSIBILITY OF SUCH DAMAGE.
         <table id="grid-networks" class="table table-condensed table-hover table-striped table-responsive" data-editDialog="dialogNetwork">
             <thead>
                 <tr>
-                    <th data-column-id="enabled" data-width="6em" data-type="string" data-formatter="rowtoggle">{{ lang._('Enabled') }}</th>
-                    <th data-column-id="networkId" data-width="20em" data-type="string" data-visible="true">{{ lang._('Network Id') }}</th>
-                    <th data-column-id="description" data-width="30em" data-type="string" data-visible="true">{{ lang._('Local Description') }}</th>
-                    <th data-column-id="commands" data-formatter="commandsWithInfo" data-visible="true" data-sortable="false">{{ lang._('Commands') }}</th>
+                    <th data-column-id="enabled" data-width="11%" data-type="string" data-formatter="rowtoggle">{{ lang._('Enabled') }}</th>
+                    <th data-column-id="networkId" data-width="32%" data-type="string" data-visible="true">{{ lang._('Network Id') }}</th>
+                    <th data-column-id="description" data-width="46%" data-type="string" data-visible="true">{{ lang._('Local Description') }}</th>
+                    <th data-column-id="commands" data-width="11%" data-formatter="commandsWithInfo" data-visible="true" data-sortable="false">{{ lang._('Commands') }}</th>
                     <th data-column-id="uuid" data-type="string" data-identifier="true" data-visible="false">{{ lang._('ID') }}</th>
                 </tr>
             </thead>

@@ -35,7 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
   var data_get_map = {'frm_rip_settings':"/api/quagga/rip/get"};
   mapDataToFormUI(data_get_map).done(function(data){
@@ -43,18 +43,14 @@ $(document).ready(function() {
       $('.selectpicker').selectpicker('refresh');
   });
 
-  ajaxCall(url="/api/quagga/service/status", sendData={}, callback=function(data,status) {
-      updateServiceStatusUI(data['status']);
-  });
+  updateServiceControlUI('quagga');
 
   // link save button to API set action
   $("#saveAct").click(function(){
       saveFormToEndpoint(url="/api/quagga/rip/set",formid='frm_rip_settings',callback_ok=function(){
         $("#saveAct_progress").addClass("fa fa-spinner fa-pulse");
         ajaxCall(url="/api/quagga/service/reconfigure", sendData={}, callback=function(data,status) {
-          ajaxCall(url="/api/quagga/service/status", sendData={}, callback=function(data,status) {
-            updateServiceStatusUI(data['status']);
-          });
+          updateServiceControlUI('quagga');
           $("#saveAct_progress").removeClass("fa fa-spinner fa-pulse");
         });
       });

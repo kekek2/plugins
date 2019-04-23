@@ -263,7 +263,7 @@ POSSIBILITY OF SUCH DAMAGE.
   </table>
 <% }) %>
 </script>
-<script type="text/javascript" src="/ui/js/quagga/lodash.js"></script>
+<script src="/ui/js/quagga/lodash.js"></script>
 <script>
 
 function translate(data)
@@ -331,9 +331,7 @@ dataconverters = {
 }
 
 $(document).ready(function() {
-  ajaxCall(url="/api/quagga/service/status", sendData={}, callback=function(data,status) {
-      updateServiceStatusUI(data['status'])
-  });
+  updateServiceControlUI('quagga');
 
   ajaxCall(url="/api/quagga/diagnostics/ospfv3overview", sendData={}, callback=function(data,status) {
     content = _.template($('#overviewtpl').html())(data['response'])
