@@ -64,16 +64,16 @@ if (!empty($_REQUEST['getdyndnsstatus'])) {
             $cached_ip_s = explode('|', $fdata);
             $cached_ip = $cached_ip_s[0];
             echo sprintf(
-                '<font color="%s">%s</font>',
-                $ipaddr != $cached_ip ? 'red' : 'green',
+                '<span class="%s">%s</span>',
+                $ipaddr != $cached_ip ? 'text-danger' : '',
                 htmlspecialchars($cached_ip)
             );
         } elseif (!empty($fdata6)) {
             $cached_ipv6_s = explode('|', $fdata6);
             $cached_ipv6 = $cached_ipv6_s[0];
             echo sprintf(
-                '<font color="%s">%s</font>',
-                $ipv6addr != $cached_ipv6 ? 'red' : 'green',
+                '<span class="%s">%s</span>',
+                $ipv6addr != $cached_ipv6 ? 'text-danger' : '',
                 htmlspecialchars($cached_ipv6)
             );
         } else {
@@ -98,7 +98,6 @@ if (!empty($_REQUEST['getdyndnsstatus'])) {
 <?php
   $iflist = get_configured_interface_with_descr();
   $types = dyndns_list();
-  $groupslist = return_gateway_groups_array();
   foreach ($a_dyndns as $i => $dyndns) :?>
     <tr ondblclick="document.location='services_dyndns_edit.php?id=<?=$i;?>'">
       <td style="word-break:break-word;" <?= isset($dyndns['enable']) ? '' : 'class="text-muted"' ?>>
@@ -106,12 +105,6 @@ if (!empty($_REQUEST['getdyndnsstatus'])) {
         foreach ($iflist as $if => $ifdesc) {
             if ($dyndns['interface'] == $if) {
                 echo "{$ifdesc}";
-                break;
-            }
-        }
-        foreach ($groupslist as $if => $group) {
-            if ($dyndns['interface'] == $if) {
-                echo "{$if}";
                 break;
             }
         }?>
