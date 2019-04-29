@@ -1,6 +1,6 @@
 <model>
   <mount>//OPNsense/Nginx</mount>
-  <version>1.5.0</version>
+  <version>1.8.0</version>
   <description>nginx web server, reverse proxy and waf</description>
   <items>
     <general>
@@ -29,6 +29,14 @@
       <default_type type="TextField">
         <Required>N</Required>
       </default_type>
+      <server_names_hash_bucket_size type="IntegerField">
+        <Required>N</Required>
+        <MinimumValue>1</MinimumValue>
+      </server_names_hash_bucket_size>
+      <server_names_hash_max_size type="IntegerField">
+        <Required>N</Required>
+        <MinimumValue>1</MinimumValue>
+      </server_names_hash_max_size>
     </http>
 
     <userlist type="ArrayField">
@@ -364,6 +372,14 @@
         <Required>Y</Required>
         <default>1</default>
       </proxy_buffering>
+      <proxy_read_timeout type="IntegerField">
+        <Required>N</Required>
+        <minValue>1</minValue>
+      </proxy_read_timeout>
+      <proxy_send_timeout type="IntegerField">
+        <Required>N</Required>
+        <minValue>1</minValue>
+      </proxy_send_timeout>
       <http2_push_preload type="BooleanField">
         <Required>Y</Required>
         <default>0</default>
@@ -416,7 +432,6 @@
           <option2 value="&gt;">Bigger</option2>
           <option3 value="&lt;">Lesser</option3>
           <option4 value="&lt;=">Lesser or Equal</option4>
-          <option5 value="=">Equal</option5>
         </OptionValues>
       </operator>
       <action type="OptionField">
@@ -551,6 +566,21 @@
         <mask>/^((?:\d+\.){3,3}\d+|[a-f0-9\:]+)(?:\/\d+)?(,?(?:(?:(\d+\.){3,3}\d+|[a-f0-9\:]+)(?:\/\d+)?))*$/i</mask>
         <multiple>Y</multiple>
       </trusted_proxies>
+      <trusted_proxies_alias type="ModelRelationField">
+        <Model>
+          <template>
+            <source>OPNsense.Firewall.Alias</source>
+            <items>aliases.alias</items>
+            <display>name</display>
+            <filters>
+              <type>/^(host|network)$/</type>
+            </filters>
+          </template>
+        </Model>
+        <ValidationMessage>Selected alias not found</ValidationMessage>
+        <Required>N</Required>
+        <multiple>N</multiple>
+      </trusted_proxies_alias>
       <real_ip_source type="OptionField">
         <OptionValues>
           <X-Real-IP>X-Real-IP (default)</X-Real-IP>
@@ -608,6 +638,7 @@
         <default>main</default>
         <OptionValues>
           <main>Default</main>
+          <main_ext>Extended</main_ext>
           <anonymized>Anonymized</anonymized>
           <disabled>Disabled</disabled>
         </OptionValues>
@@ -750,6 +781,7 @@
         <default>main</default>
         <OptionValues>
           <main>Default</main>
+          <main_ext>Extended</main_ext>
           <anonymized>Anonymized</anonymized>
           <disabled>Disabled</disabled>
         </OptionValues>

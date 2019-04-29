@@ -33,8 +33,8 @@ use OPNsense\Core\Backend;
 
 class SettingsController extends ApiMutableModelControllerBase
 {
-    static protected $internalModelClass = '\OPNsense\Nginx\Nginx';
-    static protected $internalModelName = 'nginx';
+    protected static $internalModelClass = '\OPNsense\Nginx\Nginx';
+    protected static $internalModelName = 'nginx';
 
     // download rules
     public function downloadrulesAction()
@@ -530,7 +530,7 @@ class SettingsController extends ApiMutableModelControllerBase
     public function delipaclAction($uuid)
     {
         $nginx = $this->getModel();
-        $uuid_attached = $nginx->find_ip_acl_entry_uuids($uuid);
+        $uuid_attached = $nginx->find_ip_acl_uuids($uuid);
 
         $ret = $this->delBase('ip_acl', $uuid);
         if ($ret['result'] == 'deleted') {
