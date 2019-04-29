@@ -30,6 +30,12 @@
         <help>The 'Listen IPs' parameter specifies the IP address to listen to. Default is to listen on all interfaces.</help>
     </field>
     <field>
+        <id>general.inet_port</id>
+        <label>Listen Port</label>
+        <type>text</type>
+        <help>Port to listen on.</help>
+    </field>
+    <field>
         <id>general.bind_address</id>
         <label>Bind SMTP Client Address</label>
         <type>text</type>
@@ -64,6 +70,14 @@
         <help>Set the max size for messages to accept, default is 501200000 Byte which is 50MB. Values must be entered in Bytes.</help>
     </field>
     <field>
+        <id>general.masquerade_domains</id>
+        <label>Masquerade Domains</label>
+        <style>tokenize</style>
+        <type>select_multiple</type>
+        <allownew>true</allownew>
+        <help>Masquerade internal domains to the outside. When you set example.com, the domain host.internal.example.com will be rewritten to exmaple.com when mail leaves the system.</help>
+    </field>
+    <field>
         <id>general.disable_ssl</id>
         <label>Allow TLS Only</label>
         <type>checkbox</type>
@@ -74,6 +88,12 @@
         <label>Disable Weak Ciphers And Algorithms</label>
         <type>checkbox</type>
         <help>This will disable known weak ciphers like DES, RC4 or MD5.</help>
+    </field>
+    <field>
+        <id>general.tlswrappermode</id>
+        <label>TLS Wrapper Mode</label>
+        <type>checkbox</type>
+        <help>If enabled it allows you to use SMTPS.</help>
     </field>
     <field>
         <id>general.certificate</id>

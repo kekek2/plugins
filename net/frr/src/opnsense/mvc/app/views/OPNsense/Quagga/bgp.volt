@@ -2,7 +2,7 @@
 
 OPNsense® is Copyright © 2014 – 2017 by Deciso B.V.
 Copyright (C) 2017 Fabian Franz
-Copyright (C) 2017 Michael Muenz
+Copyright (C) 2017 Michael Muenz <m.muenz@gmail.com>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -139,6 +139,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     <th data-column-id="action" data-type="string" data-visible="true">{{ lang._('Action') }}</th>
                     <th data-column-id="id" data-type="string" data-visible="true">{{ lang._('ID') }}</th>
                     <th data-column-id="match" data-type="string" data-visible="true">{{ lang._('AS Path List') }}</th>
+                    <th data-column-id="match2" data-type="string" data-visible="true">{{ lang._('Prefix List') }}</th>
                     <th data-column-id="set" data-type="string" data-visible="true">{{ lang._('Set') }}</th>
                     <th data-column-id="uuid" data-type="string" data-identifier="true" data-visible="false">{{ lang._('ID') }}</th>
                     <th data-column-id="commands" data-formatter="commands" data-sortable="false">{{ lang._('Commands') }}</th>

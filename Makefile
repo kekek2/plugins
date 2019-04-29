@@ -1,4 +1,4 @@
-# Copyright (c) 2015-2018 Franco Fichtner <franco@opnsense.org>
+# Copyright (c) 2015-2019 Franco Fichtner <franco@opnsense.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -25,6 +25,8 @@
 
 PAGER?=		less
 
+PLUGIN_ABI=	18.7
+
 all:
 	@cat ${.CURDIR}/README.md | ${PAGER}
 
@@ -49,6 +51,42 @@ ${TARGET}:
 .  for PLUGIN_DIR in ${PLUGIN_DIRS}
 	@${MAKE} -C ${PLUGIN_DIR} ${TARGET}
 .  endfor
+.endfor
+
+ARGS=	diff mfc
+
+# handle argument expansion for required targets
+.for TARGET in ${.TARGETS}
+_TARGET=		${TARGET:C/\-.*//}
+.if ${_TARGET} != ${TARGET}
+.for ARGUMENT in ${ARGS}
+.if ${_TARGET} == ${ARGUMENT}
+${_TARGET}_ARGS+=	${TARGET:C/^[^\-]*(\-|\$)//:S/,/ /g}
+${TARGET}: ${_TARGET}
+.endif
+.endfor
+${_TARGET}_ARG=		${${_TARGET}_ARGS:[0]}
+.endif
+.endfor
+
+diff:
+	@git diff --stat -p stable/${PLUGIN_ABI} ${.CURDIR}/${diff_ARGS:[1]}
+
+mfc:
+.for MFC in ${mfc_ARGS}
+.if exists(${MFC})
+	@git diff --stat -p stable/${PLUGIN_ABI} ${.CURDIR}/${MFC} > /tmp/mfc.diff
+	@git checkout stable/${PLUGIN_ABI}
+	@git apply /tmp/mfc.diff
+	@git add ${.CURDIR}
+	@if ! git diff --quiet HEAD; then \
+		git commit -m "${MFC}: sync with master"; \
+	fi
+.else
+	@git checkout stable/${PLUGIN_ABI}
+	@git cherry-pick -x ${MFC}
+.endif
+	@git checkout master
 .endfor
 
 license:

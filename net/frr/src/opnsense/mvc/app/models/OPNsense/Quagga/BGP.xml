@@ -1,7 +1,7 @@
 <model>
     <mount>//OPNsense/quagga/bgp</mount>
     <description>BGP Routing configuration</description>
-    <version>1.0.0</version>
+    <version>1.0.3</version>
     <items>
         <enabled type="BooleanField">
             <default>0</default>
@@ -13,6 +13,10 @@
             <MinimumValue>1</MinimumValue>
             <MaximumValue>4294967295</MaximumValue>
         </asnumber>
+        <routerid type="TextField">
+            <Required>N</Required>
+            <mask>/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/</mask>
+        </routerid>
         <networks type="CSVListField">
             <default></default>
             <Required>N</Required>
@@ -22,10 +26,8 @@
                 <multiple>Y</multiple>
                 <default></default>
                 <OptionValues>
-                        <babel>Babel routing protocol (Babel)</babel>
                         <ospf>Open Shortest Path First (OSPF)</ospf>
                         <connected>Connected routes (directly attached subnet or host)</connected>
-                        <isis>Intermediate System to Intermediate System (IS-IS)</isis>
                         <kernel>Kernel routes (not installed via the zebra RIB)</kernel>
                         <rip>Routing Information Protocol (RIP)</rip>
                         <static>Statically configured routes</static>
@@ -217,9 +219,20 @@
                                 <Multiple>Y</Multiple>
                                 <Required>N</Required>
                         </match>
+                        <match2 type="ModelRelationField">
+                                <Model>
+                                        <template>
+                                                <source>OPNsense.quagga.bgp</source>
+                                                <items>prefixlists.prefixlist</items>
+                                                <display>name</display>
+                                        </template>
+                                </Model>
+                                <ValidationMessage>Related item not found</ValidationMessage>
+                                <Multiple>N</Multiple>
+                                <Required>N</Required>
+                        </match2>
                         <set type="TextField">
-                                <default></default>
-                                <Required>Y</Required>
+                                <Required>N</Required>
                         </set>
                 </routemap>
         </routemaps>

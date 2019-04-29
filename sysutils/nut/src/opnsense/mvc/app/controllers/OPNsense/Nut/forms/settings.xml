@@ -19,6 +19,14 @@
                 <type>text</type>
                 <help>Set a name for your UPS.</help>
             </field>
+            <field>
+                <id>nut.general.listen</id>
+                <label>Listen Address</label>
+                <style>tokenize</style>
+                <type>select_multiple</type>
+                <allownew>true</allownew>
+                <help>Set the addresses this service listen on.</help>
+            </field>
         </subtab>
         <subtab id="nut-general-account" description="Nut Account Settings">
             <field>
@@ -46,7 +54,57 @@
             <field>
                 <id>nut.usbhid.args</id>
                 <label>Extra Arguments</label>
-                <type>text</type>
+                <style>tokenize</style>
+                <type>select_multiple</type>
+                <allownew>true</allownew>
+                <help>Set extra arguments for this UPS, e.g. "port=auto".</help>
+            </field>
+        </subtab>
+        <subtab id="nut-ups-apcsmart" description="APCSMART-Driver">
+            <field>
+                <id>nut.apcsmart.enable</id>
+                <label>Enable</label>
+                <type>checkbox</type>
+                <help>Enable the APCSMART driver.</help>
+            </field>
+            <field>
+                <id>nut.apcsmart.args</id>
+                <label>Extra Arguments</label>
+                <style>tokenize</style>
+                <type>select_multiple</type>
+                <allownew>true</allownew>
+                <help>Set extra arguments for this UPS, e.g. "port=auto".</help>
+            </field>
+        </subtab>
+        <subtab id="nut-ups-blazerusb" description="BlazerUSB-Driver">
+            <field>
+                <id>nut.blazerusb.enable</id>
+                <label>Enable</label>
+                <type>checkbox</type>
+                <help>Enable the BlazerUSB driver.</help>
+            </field>
+            <field>
+                <id>nut.blazerusb.args</id>
+                <label>Extra Arguments</label>
+                <style>tokenize</style>
+                <type>select_multiple</type>
+                <allownew>true</allownew>
+                <help>Set extra arguments for this UPS, e.g. "port=auto".</help>
+            </field>
+        </subtab>
+        <subtab id="nut-ups-blazerser" description="BlazerSerial-Driver">
+            <field>
+                <id>nut.blazerser.enable</id>
+                <label>Enable</label>
+                <type>checkbox</type>
+                <help>Enable the BlazerSerial driver.</help>
+            </field>
+            <field>
+                <id>nut.blazerser.args</id>
+                <label>Extra Arguments</label>
+                <style>tokenize</style>
+                <type>select_multiple</type>
+                <allownew>true</allownew>
                 <help>Set extra arguments for this UPS, e.g. "port=auto".</help>
             </field>
         </subtab>

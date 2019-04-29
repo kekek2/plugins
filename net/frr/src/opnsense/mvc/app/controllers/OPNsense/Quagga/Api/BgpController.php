@@ -2,7 +2,7 @@
 /**
  *    Copyright (C) 2015 - 2017 Deciso B.V.
  *    Copyright (C) 2017 Fabian Franz
- *    Copyright (C) 2017 Michael Muenz
+ *    Copyright (C) 2017 Michael Muenz <m.muenz@gmail.com>
  *
  *    All rights reserved.
  *
@@ -137,7 +137,7 @@ class BgpController extends ApiMutableModelControllerBase
     {
         return $this->searchBase(
             'routemaps.routemap',
-            array("enabled", "name", "action", "id", "match", "set")
+            array("enabled", "name", "action", "id", "match", "match2", "set")
         );
     }
 

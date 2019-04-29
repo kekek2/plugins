@@ -1,4 +1,4 @@
-# Copyright (c) 2015-2018 Franco Fichtner <franco@opnsense.org>
+# Copyright (c) 2015-2019 Franco Fichtner <franco@opnsense.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -254,8 +254,13 @@ package: check
 .for DEP in ${PLUGIN_DEPENDS}
 	@if ! ${PKG} info ${DEP} > /dev/null; then ${PKG} install -yA ${DEP}; fi
 .endfor
+	@echo -n ">>> Generating metadata for ${PLUGIN_PKGNAME}-${PLUGIN_PKGVERSION}..."
 	@${MAKE} DESTDIR=${WRKSRC} FLAVOUR=${FLAVOUR} metadata
+	@echo " done"
+	@echo -n ">>> Staging files for ${PLUGIN_PKGNAME}-${PLUGIN_PKGVERSION}..."
 	@${MAKE} DESTDIR=${WRKSRC} FLAVOUR=${FLAVOUR} install
+	@echo " done"
+	@echo ">>> Packaging files for ${PLUGIN_PKGNAME}-${PLUGIN_PKGVERSION}:"
 	@${PKG} create -v -m ${WRKSRC} -r ${WRKSRC} \
 	    -p ${WRKSRC}/plist -o ${PKGDIR}
 
@@ -288,18 +293,33 @@ lint-desc: check
 		echo ">>> Missing ${PLUGIN_DESC}"; exit 1; \
 	fi
 
-lint: lint-desc
-	find ${.CURDIR}/${SRC} \
+lint-shell:
+	@find ${.CURDIR}/${SRC} \
 	    -name "*.sh" -type f -print0 | xargs -0 -n1 sh -n
-	find ${.CURDIR}/${SRC} \
+
+lint-xml:
+	@find ${.CURDIR}/${SRC} \
 	    -name "*.xml" -type f -print0 | xargs -0 -n1 xmllint --noout
-	find ${.CURDIR}/${SRC} \
+
+lint-exec: check
+.for DIR in ${.CURDIR}/${SRC}/opnsense/scripts ${.CURDIR}/${SRC}/etc/rc.d
+.if exists(${DIR})
+	@find ${DIR} -type f ! -name "*.xml" -print0 | \
+	    xargs -0 -t -n1 test -x || \
+	    (echo "Missing executable permission in ${DIR}"; exit 1)
+.endif
+.endfor
+
+lint-php: check
+	@find ${.CURDIR}/${SRC} \
 	    ! -name "*.xml" ! -name "*.xml.sample" ! -name "*.eot" \
 	    ! -name "*.svg" ! -name "*.woff" ! -name "*.woff2" \
 	    ! -name "*.otf" ! -name "*.png" ! -name "*.js" \
 	    ! -name "*.scss" ! -name "*.py" ! -name "*.ttf" \
 	    ! -name "*.tgz" ! -name "*.xml.dist" ! -name "*.sh" \
 	    -type f -print0 | xargs -0 -n1 php -l
+
+lint: lint-desc lint-shell lint-xml lint-exec lint-php
 
 sweep: check
 	find ${.CURDIR}/${SRC} -type f -name "*.map" -print0 | \
@@ -341,15 +361,15 @@ style-fix: check
 .endfor
 
 style-python: check
-	@if [ -d ${.CURDIR}/src ]; then \
-		pycodestyle --ignore=E501 ${.CURDIR}/src || true; \
+	@if [ -d ${.CURDIR}/${SRC} ]; then \
+		pycodestyle --ignore=E501 ${.CURDIR}/${SRC} || true; \
 	fi
 
 test: check
-	@if [ -d ${.CURDIR}/src/opnsense/mvc/tests ]; then \
+	@if [ -d ${.CURDIR}/${SRC}/opnsense/mvc/tests ]; then \
 		cd /usr/local/opnsense/mvc/tests && \
 		    phpunit --configuration PHPunit.xml \
-		    ${.CURDIR}/src/opnsense/mvc/tests; \
+		    ${.CURDIR}/${SRC}/opnsense/mvc/tests; \
 	fi
 
 .PHONY:	check

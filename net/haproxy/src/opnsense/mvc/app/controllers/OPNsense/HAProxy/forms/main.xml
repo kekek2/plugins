@@ -9,9 +9,15 @@
             </field>
             <field>
                 <id>haproxy.general.gracefulStop</id>
-                <label>Graceful Stop</label>
+                <label>Graceful stop</label>
                 <type>checkbox</type>
                 <help><![CDATA[Enable HAProxy's graceful stop mode. In this mode HAProxy will continue to process existing connections until they close. Note that this may severely slow down HAProxy's shutdown, depending on the configured timeout values. If graceful stop mode is not enabled, HAProxy will use the hard stop mode where it immediately quits and all established connections are closed. Hard stop mode is recommended.]]></help>
+            </field>
+            <field>
+                <id>haproxy.general.seamlessReload</id>
+                <label>Seamless reload</label>
+                <type>checkbox</type>
+                <help><![CDATA[HAProxy will handle service restarts in a way that no connections are dropped. This is the best restart mode, because it has no impact on user experience. That being said, there might be edge cases where seamless reloads lead to unexpected behaviour.]]></help>
             </field>
             <field>
                 <id>haproxy.general.showIntro</id>
@@ -90,6 +96,12 @@
                 <type>text</type>
                 <help><![CDATA[Number of HAProxy processes to start.<br/><div class="text-info"><b>NOTE:</b> You may experience random issues in multi-process mode. For more information about the "nbproc" option please see the HAProxy Documentation.</div>]]></help>
                 <advanced>true</advanced>
+            </field>
+            <field>
+                <id>haproxy.general.tuning.nbthread</id>
+                <label>HAProxy threads</label>
+                <type>text</type>
+                <help><![CDATA[Number of threads to create for each HAProxy process.]]></help>
             </field>
             <field>
                 <id>haproxy.general.tuning.maxConnections</id>
@@ -286,13 +298,18 @@
                 <type>checkbox</type>
             </field>
             <field>
-                <id>haproxy.general.stats.users</id>
-                <label>Stats users</label>
+                <id>haproxy.general.stats.allowedUsers</id>
+                <label>Allowed Users</label>
                 <type>select_multiple</type>
-                <style>tokenize</style>
                 <allownew>true</allownew>
-                <help><![CDATA[Grant access to HAProxy statistics page. Please provide both user and password in clear text separated by a ':', i.e. john:secret123 or jdoe:anonymous. Use TAB key to complete adding a user.]]></help>
-                <hint>Enter user:password here. Finish with TAB.</hint>
+                <hint>Type username or choose from list.</hint>
+            </field>
+            <field>
+                <id>haproxy.general.stats.allowedGroups</id>
+                <label>Allowed Groups</label>
+                <type>select_multiple</type>
+                <allownew>true</allownew>
+                <hint>Type group or choose from list.</hint>
             </field>
             <field>
                 <id>haproxy.general.stats.customOptions</id>
