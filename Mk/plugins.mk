@@ -32,6 +32,7 @@ ARCH!=			uname -p
 
 PLUGIN_ARCH?=		${ARCH}
 PLUGIN_PHP?=		71
+PLUGIN_PYTHON?=		37
 
 PLUGIN_DESC=		pkg-descr
 PLUGIN_SCRIPTS=		+PRE_INSTALL +POST_INSTALL \
@@ -303,7 +304,7 @@ lint-xml:
 	    -name "*.xml" -type f -print0 | xargs -0 -n1 xmllint --noout
 
 lint-exec: check
-.for DIR in ${.CURDIR}/${SRC}/opnsense/scripts ${.CURDIR}/${SRC}/etc/rc.d
+.for DIR in ${.CURDIR}/${SRC}/opnsense/scripts ${.CURDIR}/src/etc/rc.d ${.CURDIR}/${SRC}/etc/rc.syshook.d
 .if exists(${DIR})
 	@find ${DIR} -type f ! -name "*.xml" -print0 | \
 	    xargs -0 -t -n1 test -x || \
@@ -335,7 +336,7 @@ sweep: check
 	find ${.CURDIR} -type f -depth 1 -print0 | \
 	    xargs -0 -n1 ${.CURDIR}/../../Scripts/cleanfile
 
-STYLEDIRS?=	src/etc/inc/plugins.inc.d src/opnsense
+STYLEDIRS?=	src/etc/inc src/opnsense
 
 style: check
 	@: > ${.CURDIR}/.style.out

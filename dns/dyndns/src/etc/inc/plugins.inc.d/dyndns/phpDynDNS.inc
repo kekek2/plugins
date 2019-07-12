@@ -39,6 +39,7 @@
  *    - Oray (oray.com)
  *    - regfish (regfish.de)
  *    - regfish IPv6 (regfish.de)
+ *    - DigitalOcean (digitalocean.com)
  * +----------------------------------------------------+
  *  Requirements:
  *    - PHP version 4.0.2 or higher with the CURL Library and the PCRE Library
@@ -76,8 +77,8 @@
  *  SelfHost            - Last Tested: 26 December 2011
  *  Amazon Route53      - Last Tested: 01 April 2012
  *  DNS-O-Matic         - Last Tested: 9 September 2010
- *  CloudFlare          - Last Tested: 19 September 2018
- *  CloudFlare IPv6     - Last Tested: 19 September 2018
+ *  CloudFlare          - Last Tested: 16 April 2019
+ *  CloudFlare IPv6     - Last Tested: 16 April 2019
  *  Eurodns             - Last Tested: 25 July 2018
  *  GratisDNS           - Last Tested: 15 August 2012
  *  OVH DynHOST         - Last Tested: NEVER
@@ -90,6 +91,7 @@
  *  regfish             - Last Tested: 15 August 2017
  *  regfish v6          - Last Tested: 15 August 2017
  *  Amazon Route53 v6   - Last Tested: 19 November 2017
+ *  DigitalOcean        - Last Tested: 25 June 2019
  * +====================================================+
  *
  * @author    E.Kristensen
@@ -259,13 +261,13 @@ class updatedns
         $this->_dnsMX = $dnsMX;
         $this->_dnsZoneID = $dnsZoneID;
         $this->_dnsTTL = $dnsTTL;
-        $this->_if = get_real_interface($dnsIf, $this->_useIPv6 ? 'inet6' : 'all');
+        $this->_if = dyndns_failover_interface($dnsIf, $this->_useIPv6 ? 'inet6' : 'all');
         $this->_checkIP();
         $this->_dnsUpdateURL = $dnsUpdateURL;
         $this->_dnsResultMatch = $dnsResultMatch;
-        $this->_dnsRequestIf = get_real_interface($dnsRequestIf, $this->_useIPv6 ? 'inet6' : 'all');
+        $this->_dnsRequestIf = dyndns_failover_interface($dnsRequestIf, $this->_useIPv6 ? 'inet6' : 'all');
         if ($this->_dnsVerboseLog) {
-            log_error("Dynamic DNS ({$this->_dnsHost}): running get_real_interface for {$dnsRequestIf}. found {$this->_dnsRequestIf}");
+            log_error("Dynamic DNS ({$this->_dnsHost}): running dyndns_failover_interface for {$dnsRequestIf}. found {$this->_dnsRequestIf}");
         }
         $this->_dnsRequestIfIP = get_interface_ip($dnsRequestIf);
         $this->_dnsMaxCacheAgeDays = 25;
@@ -293,6 +295,7 @@ class updatedns
                 case 'custom-v6':
                 case 'dhs':
                 case 'dnsexit':
+                case 'digitalocean':
                 case 'dnsomatic':
                 case 'duckdns':
                 case 'dyndns':
@@ -606,6 +609,25 @@ class updatedns
                 curl_setopt($ch, CURLOPT_USERPWD, $this->_dnsUser . ':' . $this->_dnsPass);
                 curl_setopt($ch, CURLOPT_URL, $server . 'hostname=' . $this->_dnsHost);
                 break;
+            case 'digitalocean':
+                /*
+                * dnsHost should be the root domain
+                * dnsUser should be the record ID
+                * dnsPass should be the API key
+                */
+                $server = "https://api.digitalocean.com/v2/domains/" . $this->_dnsHost . "/records/" . $this->_dnsUser;
+                $hostData = array("data" => "{$this->_dnsIP}");
+
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    "Authorization: Bearer {$this->_dnsPass}",
+                    'Content-Type: application/json'
+                ));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($hostData));
+                curl_setopt($ch, CURLOPT_URL, $server);
+                break;
             case 'selfhost':
                 if (isset($this->_dnsWildcard) && $this->_dnsWildcard != "OFF") {
                     $this->_dnsWildcard = "ON";
@@ -726,24 +748,23 @@ class updatedns
                     'Content-Type: application/json'
                 ));
 
-                // Get zone ID
+                // Get all zone info
                 $zonesUrl = "$baseUrl/zones";
-                // First, try removing the first part of the FQDN,
-                // under the assumption that it is probably the hostname,
-                // and look up the zone from what's left
-                $fqdnParts = explode('.', $fqdn);
-                $hostName = array_shift($fqdnParts);
-                $domainName = implode('.', $fqdnParts);
-                $getZoneId = "$zonesUrl/?name=$domainName";
-                curl_setopt($ch, CURLOPT_URL, $getZoneId);
+                curl_setopt($ch, CURLOPT_URL, $zonesUrl);
                 $output = json_decode(curl_exec($ch));
-                $zoneId = $output->result[0]->id;
-                if (empty($zoneId)) {
-                    // now try the full "hostname" as provided by the UI
-                    $getZoneId = "$zonesUrl/?name=$fqdn";
-                    curl_setopt($ch, CURLOPT_URL, $getZoneId);
-                    $output = json_decode(curl_exec($ch));
-                    $zoneId = $output->result[0]->id;
+                $zoneId = null; // Set default value
+
+                // Iterate zone objects, check if $fqdn is equal to or ends with zone name
+                foreach ($output->result as $key => $zoneObj) {
+                    if (preg_match("/^{$zoneObj->name}$|\.{$zoneObj->name}$/", $fqdn)) {
+                        // Found matching zone
+                        $zoneId = $zoneObj->id;
+                        // Get $hostName from $fqdn, set $domainName
+                        // These are only really used for log messages.
+                        $hostName = preg_replace("/\.?{$zoneObj->name}$/", '', $fqdn);
+                        $domainName = $zoneObj->name;
+                        break;
+                    }
                 }
 
                 if ($zoneId) { // If zone ID was found get host ID
@@ -1129,6 +1150,16 @@ class updatedns
                 } else {
                     $status = "Dynamic DNS ({$this->_dnsHost}): UNKNOWN ERROR - {$output->errors[0]->message}";
                     log_error("Dynamic DNS ({$this->_dnsHost}): PAYLOAD: {$data}");
+                }
+                break;
+            case 'digitalocean':
+                $output = json_decode($data);
+                if ($output->domain_record->data === $this->_dnsIP) {
+                    $status = "Dynamic DNS: (Success) Record ID {$this->_dnsUser} updated to {$this->_dnsIP}";
+                    $successful_update = true;
+                } else {
+                    $status = "Dynamic DNS Record ID ({$this->_dnsUser}): UNKNOWN ERROR";
+                    log_error("Dynamic DNS Record ID ({$this->_dnsUser}): PAYLOAD: {$data}");
                 }
                 break;
             case 'gratisdns':
